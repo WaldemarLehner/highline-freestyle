@@ -3,7 +3,7 @@ name: Sync from Google Sheets
 on:
   push:
     branches:
-      - "rewrite-fetch-tricks-action"
+      - "**"
 
 
 env:
