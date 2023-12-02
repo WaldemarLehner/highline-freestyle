@@ -30,7 +30,7 @@ jobs:
         run: |
           # Check into the "main" branch (currently rewrite)
           
-          echo "${env.GITHUB_HEAD_REF}"
+          echo "${GITHUB_HEAD_REF}"
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
