@@ -42,10 +42,10 @@ jobs:
 
             # Create it if it is missing
             git checkout -b chore/sheets
-            git branch -u origin/sheets
+            git branch -u origin/chore/sheets || true
           fi
           git checkout chore/sheets
-          
+
           # This can fail if the branch is not on remote. 
           # If that's the case, we don't care. It will be created on commit / push
           git pull || true 
