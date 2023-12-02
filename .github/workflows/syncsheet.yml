@@ -9,6 +9,7 @@ on:
 env:
   TARGET_HEAD_REF: "rewrite-fetch-tricks-action"
   TARGET_REPOSITORY: ${{ github.repository }}
+  FORCE_COLOR: 1
 
 
 permissions:
@@ -66,7 +67,10 @@ jobs:
         # Sync with the Sheet has created some changes. For the next step these changes have to be staged,
         # otherwise the diffing will not work
       - name: Add YAML Changes to Git
-        run: git add src/data
+        run: |
+          git add src/data
+          git status
+          git commit -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets"
       - name: Run the PR Procedure
         run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
         env:

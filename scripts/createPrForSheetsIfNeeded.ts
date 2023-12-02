@@ -71,7 +71,7 @@ async function createOrPutPr(
   localDiff: { operation: string; file: string }[],
   urlToAlreadyPresentPr?: string | undefined
 ) {
-  const title = `chore(sheet): Sync YAML Definitions for Tricks and Combos from Goohle Sheets`;
+  const title = `chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets`;
   const body = `
   **This action is performed automatically by a Github Action**
 
@@ -143,7 +143,7 @@ console.log(
   chalk.yellow(`PR Branch ${mainRemoteBranch} is out of sync. A commit is being prepared.`)
 );
 
-await $`git add src/data -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Goohle Sheets"`;
+await $`git add src/data -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets"`;
 await $`git push`;
 
 console.log(chalk.blue('Commited and pushed update. Creating PR...'));
