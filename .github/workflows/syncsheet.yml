@@ -7,7 +7,7 @@ on:
 
 
 env:
-  GITHUB_HEAD_REF: "origin/rewrite-fetch-tricks-action"
+  GITHUB_HEAD_REF: "origin/rewrite"
   TARGET_REPOSITORY: ${{ github.repository }}
 
 
@@ -33,7 +33,7 @@ jobs:
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
-          if [ ! `git branch --remotes | "^[[:space:]]+${origin/chore/sheets}$"` ]
+          if [ ! -z $(git branch --list --remotes origin/chore/sheets) ]
           then
             # Create if it is missing
             git checkout -b chore/sheets
@@ -42,7 +42,7 @@ jobs:
           git checkout chore/sheets
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
-          git merge rewrite --stategy-option theirs
+          git merge $GITHUB_HEAD_REF -X theirs
 
           # If here: Branch set up and will (hopefully :P) not create any issues on changes
       - name: Install Dependencies from Lock-File
