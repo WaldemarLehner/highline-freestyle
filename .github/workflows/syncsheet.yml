@@ -7,7 +7,7 @@ on:
 
 
 env:
-  TARGET_HEAD_REF: "origin/rewrite"
+  TARGET_HEAD_REF: "rewrite"
   TARGET_REPOSITORY: ${{ github.repository }}
 
 
@@ -49,7 +49,7 @@ jobs:
 
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
-          git merge ${TARGET_HEAD_REF} -X theirs
+          git merge origin/${TARGET_HEAD_REF} -X theirs
 
           # If here: Branch set up and will (hopefully :P) not create any issues on changes
       - name: Install Dependencies from Lock-File
@@ -61,4 +61,4 @@ jobs:
       - name: Add YAML Changes to Git
         run: git add src/data
       - name: Run the PR Procedure
-        run: npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
+        run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
