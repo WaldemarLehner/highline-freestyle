@@ -7,8 +7,8 @@ import { $, chalk } from 'zx';
 const repository = process.env['TARGET_REPOSITORY']
   ? process.env['TARGET_REPOSITORY']
   : 'bastislack/highline-freestyle';
-const mainRemoteBranch = process.env['GITHUB_HEAD_REF']
-  ? process.env['GITHUB_HEAD_REF']
+const mainRemoteBranch = process.env['TARGET_HEAD_REF']
+  ? process.env['TARGET_HEAD_REF']
   : 'origin/rewrite';
 
 console.log(chalk.blue('Looking for changes since last commit:'));

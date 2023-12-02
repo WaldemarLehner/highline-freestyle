@@ -7,7 +7,7 @@ on:
 
 
 env:
-  GITHUB_HEAD_REF: "origin/rewrite"
+  TARGET_HEAD_REF: "origin/rewrite"
   TARGET_REPOSITORY: ${{ github.repository }}
 
 
@@ -30,9 +30,10 @@ jobs:
         run: |
           # Check into the "main" branch (currently rewrite)
           echo "TEST"
-          echo "${TARGET_REPOSITORY}"
+          echo "${TARGET_HEAD_REF}"
           echo "TEST"
           
+          git checkout ${TARGET_HEAD_REF}
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
@@ -41,15 +42,14 @@ jobs:
 
             # Create it if it is missing
             git checkout -b chore/sheets
-            git branch --set-upstream-to=origin/chore/sheets chore/sheets
-            git push
+            git push --set-upstream=origin/chore/sheets
           fi
           git checkout chore/sheets
           git pull
 
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
-          git merge ${{env.GITHUB_HEAD_REF}} -X theirs
+          git merge ${TARGET_HEAD_REF} -X theirs
 
           # If here: Branch set up and will (hopefully :P) not create any issues on changes
       - name: Install Dependencies from Lock-File
