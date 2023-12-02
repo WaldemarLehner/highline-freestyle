@@ -99,7 +99,7 @@ async function createOrPutPr(
   }
   // if here: PR does not exist. We have to create it.
   const branch = mainRemoteBranch.split('/').filter((_, i) => i > 0);
-  await $`gh pr create --title "${title}" --body "${body}" --base ${branch} --label automatic,sheets-update --assignee @bastislack `;
+  await $`cat <<EOF${body}EOF | gh pr create --title "${title}" --body-file - --base ${branch} --label automatic,sheets-update --assignee @bastislack `;
   console.log(chalk.green('A new PR has been created'));
 }
 
