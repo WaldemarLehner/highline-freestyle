@@ -30,7 +30,7 @@ jobs:
         run: |
           # Check into the "main" branch (currently rewrite)
           echo "TEST"
-          echo "${{GITHUB_HEAD_REF}}"
+          echo "${TARGET_REPOSITORY}"
           echo "TEST"
           
           git pull
