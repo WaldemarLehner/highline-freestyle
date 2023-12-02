@@ -58,10 +58,10 @@ jobs:
       - name: Install Dependencies from Lock-File
         run: npm ci
       - name: Sync with the Sheet
-        run: npx vite-node ./scripts/fetchFromSheet.ts
+        run: npx vite-node ../scripts/fetchFromSheet.ts
         # Sync with the Sheet has created some changes. For the next step these changes have to be staged,
         # otherwise the diffing will not work
       - name: Add YAML Changes to Git
         run: git add src/data
       - name: Run the PR Procedure
-        run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
+        run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ../scripts/createPrForSheetsIfNeeded.ts
