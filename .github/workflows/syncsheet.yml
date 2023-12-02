@@ -42,10 +42,13 @@ jobs:
 
             # Create it if it is missing
             git checkout -b chore/sheets
-            git push --set-upstream=origin/chore/sheets
+            git branch -u origin/sheets
           fi
           git checkout chore/sheets
-          git pull
+          
+          # This can fail if the branch is not on remote. 
+          # If that's the case, we don't care. It will be created on commit / push
+          git pull || true 
 
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
