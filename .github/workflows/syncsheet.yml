@@ -69,3 +69,5 @@ jobs:
         run: git add src/data
       - name: Run the PR Procedure
         run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
+        env:
+          GH_TOKEN: ${{ github.token }}
