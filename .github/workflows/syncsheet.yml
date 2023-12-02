@@ -1,7 +1,9 @@
 name: Sync from Google Sheets
 
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - "rewrite-fetch-tricks-action"
 
 
 env:
