@@ -29,8 +29,13 @@ jobs:
       - name: Prepare the Branch
         run: |
           # Check into the "main" branch (currently rewrite)
-          git checkout "$GITHUB_HEAD_REF"
+          echo $GITHUB_HEAD_REF
+          echo ${GITHUB_HEAD_REF}
           echo "$GITHUB_HEAD_REF"
+          echo ${{GITHUB_HEAD_REF}}
+          echo ${{env.GITHUB_HEAD_REF}}
+          git checkout "${{env.GITHUB_HEAD_REF}}"
+          echo "${env.GITHUB_HEAD_REF}"
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
@@ -47,7 +52,7 @@ jobs:
 
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
-          git merge $GITHUB_HEAD_REF -X theirs
+          git merge ${{env.GITHUB_HEAD_REF}} -X theirs
 
           # If here: Branch set up and will (hopefully :P) not create any issues on changes
       - name: Install Dependencies from Lock-File
