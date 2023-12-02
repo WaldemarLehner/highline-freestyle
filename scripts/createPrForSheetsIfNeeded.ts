@@ -90,8 +90,7 @@ async function createOrPutPr(
 
   if (urlToAlreadyPresentPr) {
     const localDiffText =
-      (globalDiff.map((e) => `- File ${e.file} was ${e.operation.toLocaleLowerCase()}`),
-      join('\n'));
+      (localDiff.map((e) => `- File ${e.file} was ${e.operation.toLocaleLowerCase()}`), join('\n'));
 
     // PR exists. We replace the Body and add a comment with the local changes
     await $`gh pr edit ${urlToAlreadyPresentPr} --body "${body}"`;
@@ -121,10 +120,11 @@ if (globalDiff.length === 0) {
 }
 
 // This checks the currently staged files.
-const localDiff = parseDiffOutput((await $`git diff --name-status`.quiet()).stdout).filter(
+const localDiff = parseDiffOutput((await $`git diff --name-status HEAD`.quiet()).stdout).filter(
   // We only care about data-Changes. There *shouldnt* be any other changes, but hey.. you never know :P
   (e) => e.file.startsWith('src/data')
 );
+console.log(localDiff);
 
 if (localDiff.length === 0) {
   console.log(chalk.blue(`PR Branch ${mainRemoteBranch} is in sync. There are no local changes.`));

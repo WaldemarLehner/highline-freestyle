@@ -74,7 +74,6 @@ jobs:
         run: |
           git add src/data
           git status
-          git commit -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets"
       - name: Run the PR Procedure
         run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
         env:
