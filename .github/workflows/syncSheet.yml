@@ -9,6 +9,10 @@ env:
   TARGET_REPOSITORY: ${{ github.repository }}
 
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   sync:
     name: Sync Data from Google Sheets
