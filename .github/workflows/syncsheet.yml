@@ -29,8 +29,8 @@ jobs:
       - name: Prepare the Branch
         run: |
           # Check into the "main" branch (currently rewrite)
-          git checkout $GITHUB_HEAD_REF
-          echo $$GITHUB_HEAD_REF
+          git checkout "$GITHUB_HEAD_REF"
+          echo "$GITHUB_HEAD_REF"
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
