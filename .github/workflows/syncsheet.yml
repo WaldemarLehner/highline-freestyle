@@ -30,14 +30,17 @@ jobs:
         run: |
           # Check into the "main" branch (currently rewrite)
           git checkout $GITHUB_HEAD_REF
+          echo $$GITHUB_HEAD_REF
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
           if [ -z $(git branch --list --remotes origin/chore/sheets) ]
           then
 
-            # Create if it is missing
+            # Create it if it is missing
             git checkout -b chore/sheets
+            git branch --set-upstream-to=origin/chore/sheets chore/sheets
+            git push
           fi
           git checkout chore/sheets
           git pull
