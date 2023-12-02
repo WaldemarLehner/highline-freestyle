@@ -127,7 +127,9 @@ const localDiff = parseDiffOutput((await $`git diff --name-status HEAD`.quiet())
 console.log(localDiff);
 
 if (localDiff.length === 0) {
-  console.log(chalk.blue(`PR Branch ${mainRemoteBranch} is in sync. There are no local changes.`));
+  console.log(
+    chalk.blue(`Base Branch ${mainRemoteBranch} is in sync. There are no local changes.`)
+  );
 
   if (!alreadyExistingPrData) {
     console.log(
@@ -140,11 +142,11 @@ if (localDiff.length === 0) {
 }
 
 console.log(
-  chalk.yellow(`PR Branch ${mainRemoteBranch} is out of sync. A commit is being prepared.`)
+  chalk.yellow(`Base Branch ${mainRemoteBranch} is out of sync. A commit is being prepared.`)
 );
 
-await $`git add src/data -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets"`;
-await $`git push`;
+await $`git commit -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets"`;
+await $`git push --set-upstream origin chore/sheets`;
 
 console.log(chalk.blue('Commited and pushed update. Creating PR...'));
 
