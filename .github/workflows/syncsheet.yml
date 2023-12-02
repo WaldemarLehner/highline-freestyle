@@ -29,17 +29,26 @@ jobs:
       - name: Prepare the Branch
         run: |
           # Check into the "main" branch (currently rewrite)
+          echo A
           git checkout $GITHUB_HEAD_REF
+          echo B
           git pull
 
           # Check if a "chore/sheets" Branch does not exists.
           if [ ! -z $(git branch --list --remotes origin/chore/sheets) ]
           then
+            echo C
+
             # Create if it is missing
             git checkout -b chore/sheets
           fi
+          echo D
 
           git checkout chore/sheets
+          echo E
+          
+          git pull
+
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
           git merge $GITHUB_HEAD_REF -X theirs
