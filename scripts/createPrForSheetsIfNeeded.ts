@@ -1,5 +1,6 @@
 // Run using npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
 // or TARGET_REPOSITORY="..." npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
+import { join } from 'path';
 import { exit } from 'process';
 import { $, chalk } from 'zx';
 
@@ -51,7 +52,6 @@ async function findPr() {
     title: string;
     body: string;
   }[];
-  const x = 0;
   if (response.length === 0) {
     return undefined;
   }
@@ -65,6 +65,44 @@ async function findPr() {
 }
 
 const alreadyExistingPrData = await findPr();
+
+async function createOrPutPr(
+  globalDiff: { operation: string; file: string }[],
+  localDiff: { operation: string; file: string }[],
+  urlToAlreadyPresentPr?: string | undefined
+) {
+  const title = `chore(sheet): Sync YAML Definitions for Tricks and Combos from Goohle Sheets`;
+  const body = `
+  **This action is performed automatically by a Github Action**
+
+  There are ${
+    globalDiff.length
+  } changes to the YAML files between the Google Sheet and the base-Branch:
+  \`\`\`
+  ${(globalDiff.map((e) => `File ${e.file} was ${e.operation.toLocaleLowerCase()}`), join('\n'))}
+  \`\`\`
+
+  If something is wrong in these Tricks, **do not change them in the code here**. Fix them in the Google Sheet instead.
+  `
+    .split('\n')
+    .map((e) => e.trim())
+    .join('\n');
+
+  if (urlToAlreadyPresentPr) {
+    const localDiffText =
+      (globalDiff.map((e) => `- File ${e.file} was ${e.operation.toLocaleLowerCase()}`),
+      join('\n'));
+
+    // PR exists. We replace the Body and add a comment with the local changes
+    await $`gh pr edit ${urlToAlreadyPresentPr} --body "${body}"`;
+    await $`gh pr comment ${urlToAlreadyPresentPr} --body "Since the last time this action was run the following changes have occured: \n${localDiffText}"`;
+    return;
+  }
+  // if here: PR does not exist. We have to create it.
+  const branch = mainRemoteBranch.split('/').filter((_, i) => i > 0);
+  await $`gh pr create --title "${title}" --body "${body}" --base ${branch} --label automatic,sheets-update --assignee @bastislack `;
+  console.log(chalk.green('A new PR has been created'));
+}
 
 const globalDiff = parseDiffOutput(
   (await $`git diff ${mainRemoteBranch} --name-status`.quiet()).stdout
@@ -90,11 +128,24 @@ const localDiff = parseDiffOutput((await $`git diff --name-status`.quiet()).stdo
 
 if (localDiff.length === 0) {
   console.log(chalk.blue(`PR Branch ${mainRemoteBranch} is in sync. There are no local changes.`));
-  // In case a PR is not open, create one.
-  // TODO
+
+  if (!alreadyExistingPrData) {
+    console.log(
+      chalk.yellow(`Could not find a PR for the already present changed. Creating one...`)
+    );
+    await createOrPutPr(globalDiff, localDiff);
+  }
+
   exit(0);
 }
 
 console.log(
   chalk.yellow(`PR Branch ${mainRemoteBranch} is out of sync. A commit is being prepared.`)
 );
+
+await $`git add src/data -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Goohle Sheets"`;
+await $`git push`;
+
+console.log(chalk.blue('Commited and pushed update. Creating PR...'));
+
+await createOrPutPr(globalDiff, localDiff, alreadyExistingPrData?.title);
