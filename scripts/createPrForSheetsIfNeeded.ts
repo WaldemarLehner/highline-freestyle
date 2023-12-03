@@ -1,5 +1,6 @@
 // Run using npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
 // or TARGET_REPOSITORY="..." npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
+import { unlink, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { exit } from 'process';
 import { $, chalk } from 'zx';
@@ -97,9 +98,13 @@ async function createOrPutPr(
     await $`gh pr comment ${urlToAlreadyPresentPr} --body "Since the last time this action was run the following changes have occured: \n${localDiffText}"`;
     return;
   }
+
+  await writeFile('.body', body, 'utf-8');
+
   // if here: PR does not exist. We have to create it.
   const branch = mainRemoteBranch.split('/').filter((_, i) => i > 0);
-  await $`cat <<EOF${body}EOF | gh pr create --title "${title}" --body-file - --base ${branch} --label automatic,sheets-update --assignee @bastislack `;
+  await $`gh pr create --title "${title}" --body-file .body --base ${branch} --label automatic,sheets-update --assignee @bastislack `;
+  await unlink('.body');
   console.log(chalk.green('A new PR has been created'));
 }
 
