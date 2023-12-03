@@ -72,7 +72,7 @@ async function createOrPutPr(
   localDiff: { operation: string; file: string }[],
   urlToAlreadyPresentPr?: string | undefined
 ) {
-  const title = `chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets`;
+  const title = 'chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets';
   const body = `
   **This action is performed automatically by a Github Action**
 
@@ -80,7 +80,7 @@ async function createOrPutPr(
     globalDiff.length
   } changes to the YAML files between the Google Sheet and the base-Branch:
   \`\`\`
-  ${(globalDiff.map((e) => `File ${e.file} was ${e.operation.toLocaleLowerCase()}`), join('\n'))}
+  ${globalDiff.map((e) => `File ${e.file} was ${e.operation.toLocaleLowerCase()}`).join('\n')}
   \`\`\`
 
   If something is wrong in these Tricks, **do not change them in the code here**. Fix them in the Google Sheet instead.
