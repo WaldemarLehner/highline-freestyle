@@ -57,7 +57,7 @@ jobs:
 
           # If here: Branch exists. But might still have a bad state.
           # Merge from rewrite and favour their (rewrite) changes on conflicts
-          git merge origin/${TARGET_HEAD_REF} -X theirs
+          git rebase origin/${TARGET_HEAD_REF} -X theirs
 
           # If here: Branch set up and will (hopefully :P) not create any issues on changes
       - name: Install Dependencies from Lock-File
