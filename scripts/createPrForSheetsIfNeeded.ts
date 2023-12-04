@@ -109,7 +109,7 @@ console.log(
   'Does PR already exist? ',
   alreadyExistingPrData ? chalk.green('yes') : chalk.red('no')
 );
-console.log(chalk.blue('Looking for changes base commit:'));
+console.log(chalk.blue('Looking for changes to base commit:'));
 
 const globalDiff = parseDiffOutput(
   (await $`git diff ${mainRemoteBranch} --name-status`.quiet()).stdout
@@ -117,6 +117,7 @@ const globalDiff = parseDiffOutput(
   // We only care about data-Changes. There *shouldnt* be any other changes, but hey.. you never know :P
   (e) => e.file.startsWith('src/data')
 );
+console.log(globalDiff);
 
 if (globalDiff.length === 0) {
   console.log(chalk.blue(`Base branch ${mainRemoteBranch} is in sync. There are no changes.`));
@@ -126,6 +127,8 @@ if (globalDiff.length === 0) {
   }
   exit(0);
 }
+
+console.log(chalk.blue('Looking for changes since last detection:'));
 
 // This checks the currently staged files.
 const localDiff = parseDiffOutput((await $`git diff --name-status HEAD`.quiet()).stdout).filter(

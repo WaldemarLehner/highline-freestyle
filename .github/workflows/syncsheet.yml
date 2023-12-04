@@ -10,6 +10,7 @@ env:
   TARGET_HEAD_REF: "rewrite-fetch-tricks-action"
   TARGET_REPOSITORY: ${{ github.repository }}
   FORCE_COLOR: 1
+  CI: true
 
 
 permissions:
