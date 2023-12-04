@@ -51,16 +51,17 @@ async function findPr() {
     body: string;
   }[];
   console.log({ response });
+  console.log(response.length);
   if (response.length === 0) {
     return undefined;
   }
   if (response.length > 1) {
     throw new Error(
-      'More than one Automated open PR found! This should never happen. Please manually close the wrong PRs.'
+      'More than one Automated open PR found! This should never happen. Please manually close the wrong PRs and retry.'
     );
   }
   // There should never ever be more than 1 active PR
-  return response[1];
+  return response[0];
 }
 
 async function createOrPutPr(
