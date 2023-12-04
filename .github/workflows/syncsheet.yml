@@ -62,10 +62,6 @@ jobs:
           # If here: Branch set up and will (hopefully :P) not create any issues on changes
       - name: Install Dependencies from Lock-File
         run: npm ci
-      - name: Debug stuffs
-        run: |
-          ls -lh
-          tree .github
       - name: Sync with the Sheet
         run: npx vite-node ./scripts/fetchFromSheet.ts
         # Sync with the Sheet has created some changes. For the next step these changes have to be staged,

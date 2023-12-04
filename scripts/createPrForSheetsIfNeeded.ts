@@ -12,8 +12,6 @@ const mainRemoteBranch = process.env['TARGET_HEAD_REF']
   ? process.env['TARGET_HEAD_REF']
   : 'origin/rewrite';
 
-console.log(chalk.blue('Looking for changes since last commit:'));
-
 function parseDiffOutput(output: string) {
   function getOperations(operation: string) {
     switch (operation) {
@@ -65,8 +63,6 @@ async function findPr() {
   return response[1];
 }
 
-const alreadyExistingPrData = await findPr();
-
 async function createOrPutPr(
   globalDiff: { operation: string; file: string }[],
   localDiff: { operation: string; file: string }[],
@@ -107,6 +103,13 @@ async function createOrPutPr(
   await unlink('.body');
   console.log(chalk.green('A new PR has been created'));
 }
+
+const alreadyExistingPrData = await findPr();
+console.log(
+  'Does PR already exist? ',
+  alreadyExistingPrData ? chalk.green('yes') : chalk.red('no')
+);
+console.log(chalk.blue('Looking for changes base commit:'));
 
 const globalDiff = parseDiffOutput(
   (await $`git diff ${mainRemoteBranch} --name-status`.quiet()).stdout
