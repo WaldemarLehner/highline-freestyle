@@ -67,7 +67,6 @@ async function createOrPutPr(
   localDiff: { operation: string; file: string }[],
   urlToAlreadyPresentPr?: string | undefined
 ) {
-  const title = 'chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets';
   const body = `
   **This action is performed automatically by a Github Action**
 
@@ -98,7 +97,7 @@ async function createOrPutPr(
 
   // if here: PR does not exist. We have to create it.
   const branch = mainRemoteBranch.split('/').filter((_, i) => i > 0);
-  await $`gh pr create --title ${title} --body-file .body --base ${branch} --label automatic,sheets-update`;
+  await $`gh pr create --title 'chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets'  --body-file .body --base ${branch} --label automatic,sheets-update`;
   await unlink('.body');
   console.log(chalk.green('A new PR has been created'));
 }
