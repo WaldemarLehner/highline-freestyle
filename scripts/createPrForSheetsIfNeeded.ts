@@ -43,9 +43,10 @@ function parseDiffOutput(output: string) {
 // Tries to find a Pull Requests with "automatic", "sheet-update" Tags that belongs has its HEAD on the current branch.
 async function findPr() {
   const currentBranch = await $`git rev-parse --abbrev-ref HEAD`.quiet();
+  console.log({ currentBranch });
   const jsonResponseShell =
-    await $`gh search  prs --repo=${repository} --label automatic,sheet-update --state open --json url,title,body --head ${currentBranch}`.quiet();
-
+    await $`gh search  prs --repo=${repository} --label automatic,sheet-update --state open --json url,title,body --head ${currentBranch}`;
+  console.log({ stdout: jsonResponseShell.stdout });
   const response = JSON.parse(jsonResponseShell.stdout) as {
     url: string;
     title: string;
