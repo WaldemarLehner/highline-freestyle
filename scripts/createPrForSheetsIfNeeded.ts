@@ -82,8 +82,9 @@ async function createOrPutPr(
   await writeFile('.body', body, 'utf-8');
 
   if (urlToAlreadyPresentPr) {
-    const localDiffText =
-      (localDiff.map((e) => `- File ${e.file} was ${e.operation.toLocaleLowerCase()}`), join('\n'));
+    const localDiffText = localDiff
+      .map((e) => `- File ${e.file} was ${e.operation.toLocaleLowerCase()}`)
+      .join('\n');
 
     // PR exists. We replace the Body and add a comment with the local changes
     await $`gh pr edit ${urlToAlreadyPresentPr} --body-file .body`;
