@@ -103,6 +103,17 @@ async function createOrPutPr(
   console.log(chalk.green('A new PR has been created'));
 }
 
+console.log('DEBUG');
+console.log('DEBUG');
+
+await $`git status`;
+await $`git diff --name-status`;
+await $`git diff --name-status HEAD`;
+await $`git diff --name-status HEAD^1`;
+
+console.log('DEBUG');
+console.log('DEBUG');
+
 const alreadyExistingPrData = await findPr();
 console.log(
   'Does PR already exist? ',
