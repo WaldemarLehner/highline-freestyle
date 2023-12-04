@@ -82,18 +82,25 @@ async function createOrPutPr(
     .split('\n')
     .map((e) => e.trim())
     .join('\n');
+  await writeFile('.body', body, 'utf-8');
 
   if (urlToAlreadyPresentPr) {
     const localDiffText =
       (localDiff.map((e) => `- File ${e.file} was ${e.operation.toLocaleLowerCase()}`), join('\n'));
 
     // PR exists. We replace the Body and add a comment with the local changes
-    await $`gh pr edit ${urlToAlreadyPresentPr} --body "${body}"`;
-    await $`gh pr comment ${urlToAlreadyPresentPr} --body "Since the last time this action was run the following changes have occured: \n${localDiffText}"`;
+    await $`gh pr edit ${urlToAlreadyPresentPr} --body-file .body`;
+    await writeFile(
+      '.comment',
+      `Since the last time this action was run the following changes have occured: \n${localDiffText}`,
+      'utf-8'
+    );
+    await $`gh pr comment ${urlToAlreadyPresentPr} --body-file .comment`;
+    await unlink('.comment');
+    await unlink('.body');
+
     return;
   }
-
-  await writeFile('.body', body, 'utf-8');
 
   // if here: PR does not exist. We have to create it.
   const branch = mainRemoteBranch.split('/').filter((_, i) => i > 0);
