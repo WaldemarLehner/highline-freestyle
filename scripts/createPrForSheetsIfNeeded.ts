@@ -32,12 +32,9 @@ function parseDiffOutput(output: string) {
     .split('\n')
     .filter((e) => e.trim().length > 0)
     .map((e) => {
-      const asCharArray = e.split('');
-      const operation = asCharArray[0];
-      const file = asCharArray.filter((_, i) => i > 1).join('');
-      return [operation, file] as const;
-    })
-    .map(([operation, file]) => ({ operation: getOperations(operation), file }));
+      const [operation, file] = e.split('\t');
+      return { operation: getOperations(operation[0]), file };
+    });
 }
 
 // Tries to find a Pull Requests with "automatic", "sheet-update" Tags that belongs has its HEAD on the current branch.
