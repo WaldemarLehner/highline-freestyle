@@ -98,21 +98,10 @@ async function createOrPutPr(
 
   // if here: PR does not exist. We have to create it.
   const branch = mainRemoteBranch.split('/').filter((_, i) => i > 0);
-  await $`gh pr create --title "${title}" --body-file .body --base ${branch} --label automatic,sheets-update`;
+  await $`gh pr create --title '${title}' --body-file .body --base ${branch} --label automatic,sheets-update`;
   await unlink('.body');
   console.log(chalk.green('A new PR has been created'));
 }
-
-console.log('DEBUG');
-console.log('DEBUG');
-
-await $`git status`;
-await $`git diff --name-status`;
-await $`git diff --name-status HEAD`;
-await $`git diff --name-status HEAD^1`;
-
-console.log('DEBUG');
-console.log('DEBUG');
 
 const alreadyExistingPrData = await findPr();
 console.log(
