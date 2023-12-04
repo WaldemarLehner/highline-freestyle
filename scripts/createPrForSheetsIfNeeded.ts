@@ -158,4 +158,4 @@ try {
 }
 console.log(chalk.blue('Commited and pushed update. Creating PR...'));
 
-await createOrPutPr(globalDiff, localDiff, alreadyExistingPrData?.title);
+await createOrPutPr(globalDiff, localDiff, alreadyExistingPrData?.url);
