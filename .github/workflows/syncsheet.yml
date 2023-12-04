@@ -69,7 +69,7 @@ jobs:
       - name: Add YAML Changes to Git
         run: |
           git add src/data
-          npm run lint:staged
+          npm run lint:staged -- --allow-empty
           git status
       - name: Run the PR Procedure
         run: TARGET_HEAD_REF="origin/${TARGET_HEAD_REF}" npx vite-node ./scripts/createPrForSheetsIfNeeded.ts
