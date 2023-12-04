@@ -50,8 +50,6 @@ async function findPr() {
     title: string;
     body: string;
   }[];
-  console.log({ response });
-  console.log(response.length);
   if (response.length === 0) {
     return undefined;
   }
@@ -132,7 +130,7 @@ if (globalDiff.length === 0) {
 console.log(chalk.blue('Looking for changes since last detection:'));
 
 // This checks the currently staged files.
-const localDiff = parseDiffOutput((await $`git diff --name-status HEAD`.quiet()).stdout).filter(
+const localDiff = parseDiffOutput((await $`git diff --name-status HEAD`).stdout).filter(
   // We only care about data-Changes. There *shouldnt* be any other changes, but hey.. you never know :P
   (e) => e.file.startsWith('src/data')
 );
