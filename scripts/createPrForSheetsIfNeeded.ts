@@ -152,9 +152,9 @@ console.log(chalk.yellow(`Base Branch is out of sync. A commit is being prepared
 
 await $`git commit -m "chore(sheet): Sync YAML Definitions for Tricks and Combos from Google Sheets"`;
 try {
-  await $`git --set-upstream origin chore/sheets`;
+  await $`git push --set-upstream origin chore/sheets`;
 } catch (_) {
-  await $`git --force --set-upstream origin chore/sheets`;
+  await $`git push --force --set-upstream origin chore/sheets`;
 }
 console.log(chalk.blue('Commited and pushed update. Creating PR...'));
 
